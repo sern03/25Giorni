@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "799367497425",
+    "firebase_url": "https://app-ila-93274-default-rtdb.firebaseio.com",
+    "project_id": "app-ila-93274",
+    "storage_bucket": "app-ila-93274.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799367497425:android:45394efa25eb4fe59e67f0",
+        "android_client_info": {
+          "package_name": "com.sern.app_ila"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpHKLemH89PTcthLRlztg5c_fbXZtunHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

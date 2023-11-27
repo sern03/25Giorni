@@ -1,0 +1,48 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_margin="3dp"
+    android:layout_gravity="center_horizontal"
+    app:cardBackgroundColor="@color/christmasRed"
+    app:cardCornerRadius="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewDayOfWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lun"
+            android:textColor="@color/white"
+
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/textViewNum"
+            android:background="@drawable/style_num_date"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:textAlignment="center"
+            android:text="1"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/christmasGold"
+            tools:ignore="HardcodedText" />
+
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>
+
+
+
+

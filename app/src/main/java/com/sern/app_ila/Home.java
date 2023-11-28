@@ -96,10 +96,6 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
         imageView = findViewById(R.id.imageView);
         scrollView = findViewById(R.id.scrollView);
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("counterTentativi", 0);              //counter per messaggi quando si prova ad aprire una data bloccata
-        editor.apply();
-
         populateArrayMessaggi();
 
         buttonInfo = findViewById(R.id.buttonInfo);
@@ -178,6 +174,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
                     startActivity(browserIntent);
                 }else{
                     loadDay(String.valueOf(26), true);
+                    clickPerMessaggio = false;
                 }
 
             }
@@ -187,6 +184,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
 
 
     private void loadDay(String dayOfMonth, boolean callDaClick){
+        if(!clickPerMessaggio) textViewDayOfMonth.setText(dayOfMonth);
                 //(questo controllo è utile solo nel caso in cui si clicchi una data nel calendario o si apra prima dell'1)
         if(currentDate.isBefore(LocalDate.of(2023, 12, Integer.parseInt(dayOfMonth)))){
             //se la data cliccata (dayOfMonth) è maggiore a quella corrente -> data non sbloccata
@@ -200,12 +198,12 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
                 testoAugurio = listaMessaggiDataNonSbloccata.get(counterMessaggi);     //stampa il prossimo messaggio
                 textViewAugurio.setText(testoAugurio);
 
-                if(counterMessaggi == 4){
+                if(counterMessaggi == 6){
                     buttonLink.setVisibility(View.VISIBLE);
                     clickPerMessaggio = true;
                 }
 
-                if(counterMessaggi < 23){   //ci sono 24 messaggi in totale
+                if(counterMessaggi < 25){   //ci sono 24 messaggi in totale
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putInt("counterTentativi", counterMessaggi+1);   //counter per messaggi quando si prova ad aprire una data bloccata
                     editor.apply();
@@ -222,8 +220,6 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
             testoAugurio = "";
             textViewAugurio.setText(testoAugurio);
             scrollView.setVisibility(View.INVISIBLE);
-
-            textViewDayOfMonth.setText(dayOfMonth);
 
             percorsoDay = FirebaseDatabase.getInstance().getReference().child(String.valueOf(dayOfMonth));
 
@@ -286,6 +282,8 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
     private void populateArrayMessaggi() {
         listaMessaggiDataNonSbloccata.add("Non è ancora iniziato dicembre!");
         listaMessaggiDataNonSbloccata.add("È inutile che ci provi");
+        listaMessaggiDataNonSbloccata.add("Smettila di cliccare altre date");
+        listaMessaggiDataNonSbloccata.add("Sono bloccate");
         listaMessaggiDataNonSbloccata.add("Vuoi continuare ancora per molto?");
         listaMessaggiDataNonSbloccata.add("...");
         listaMessaggiDataNonSbloccata.add("Va bene dai...");
@@ -300,7 +298,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
         listaMessaggiDataNonSbloccata.add("Vabe");
         listaMessaggiDataNonSbloccata.add("Ci rinuncio");
         listaMessaggiDataNonSbloccata.add("Davvero sei arrivata fino a qui");
-        listaMessaggiDataNonSbloccata.add("Credeo mollassi prima");
+        listaMessaggiDataNonSbloccata.add("Credevo mollassi prima");
         listaMessaggiDataNonSbloccata.add("Ti amo");
         listaMessaggiDataNonSbloccata.add("Tanto");
         listaMessaggiDataNonSbloccata.add("Ora la smetti di provarci?");

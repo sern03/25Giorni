@@ -123,7 +123,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
                         // ottengo il giorno corrente e se è supportato procedo
         currentDate = LocalDate.now();
                         currentDate = LocalDate.of(2023, 12, 2);   /////////////////////////////////////////////////////////
-        LocalDate dataNatale2023 = LocalDate.of(2023, 12, 30);
+        LocalDate dataNatale2023 = LocalDate.of(2023, 12, 25);
         LocalDate inizioAvvento = LocalDate.of(2023, 12, 1);
 
         int currentDayOfMonth = currentDate.getDayOfMonth();

@@ -88,7 +88,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingBottom="60dp"
+        android:paddingBottom="50dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

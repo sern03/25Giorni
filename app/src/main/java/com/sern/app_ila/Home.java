@@ -122,7 +122,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
 
                         // ottengo il giorno corrente e se è supportato procedo
         currentDate = LocalDate.now();
-        currentDate = LocalDate.of(2023, 12, 1);
+                        currentDate = LocalDate.of(2023, 12, 2);   /////////////////////////////////////////////////////////
         LocalDate dataNatale2023 = LocalDate.of(2023, 12, 30);
         LocalDate inizioAvvento = LocalDate.of(2023, 12, 1);
 
@@ -165,7 +165,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadDay(String.valueOf(1), false);
+                loadDay(String.valueOf(currentDayOfMonth), false);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -190,6 +190,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
                 //(questo controllo è utile solo nel caso in cui si clicchi una data nel calendario o si apra prima dell'1)
         if(currentDate.isBefore(LocalDate.of(2023, 12, Integer.parseInt(dayOfMonth)))){
             //se la data cliccata (dayOfMonth) è maggiore a quella corrente -> data non sbloccata
+            swipeRefreshLayout.setEnabled(true);  //lo riattivo
 
             buttonLink.setVisibility(View.GONE);
             scrollView.setVisibility(View.INVISIBLE);
@@ -214,6 +215,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
 
         }else{                                         //data supportata
             progressBar.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setEnabled(false);  //lo disabilito per lo scorrimento della scrollView
 
             link = "";
             buttonLink.setVisibility(View.GONE);
@@ -264,6 +266,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
                         imageBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
                         imageView.setImageBitmap(imageBitmap);
                         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageView.setVisibility(View.VISIBLE);
                     }catch (Exception ignored){
 
                     }

@@ -40,7 +40,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="30dp"
         android:textColor="@color/black"
-        android:text="Ciao amore 🙃 \nQuesto è il calendario d'avvento più spontaneo che riceverai mai 🤣 \nNo scherzo, mi sto divertendo a farlo e spero ti piaccia quest'idea un po diversa dal solito ❤️ \nLo sai che il tuo ragazzo è tecnologico e soprattutto pignolo (l'idea che avresti avuto il calendario 6 giorni dopo l'inizio di dicembre mi dava troppo urto ahahah), per questo ho deciso di farti un'app! \nL'utilizzo è molto semplice: avrai un calendario di 25 giorni e ognuno di questi si sbloccherà al giorno corrispondente. \n(L'app ha bisogno di internet per funzionare!) \nBuon mese di dicembre e spero che questo calendario ti accompagni al meglio 🎄❤️ \n\nTi amo❤️ "
+        android:text="Ciao amore 🙃 \nQuesto è il calendario d'avvento più spontaneo che riceverai mai 🤣 \nNo scherzo, mi sto divertendo a farlo e spero ti piaccia quest'idea un po diversa dal solito ❤️ \nLo sai che il tuo ragazzo è tecnologico e soprattutto pignolo (l'idea che avresti avuto il calendario 6 giorni dopo l'inizio di dicembre mi dava troppo urto ahahah), per questo ho deciso di farti un'app! \nL'utilizzo è molto semplice: avrai un calendario di 25 giorni e ognuno di questi si sbloccherà al giorno corrispondente. \nBuon mese di dicembre e spero che questo calendario ti accompagni al meglio 🎄❤️ \n\nTi amo❤️ "
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

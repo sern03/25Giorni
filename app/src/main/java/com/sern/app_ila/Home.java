@@ -345,7 +345,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
     }
 
     private void populateArrayMessaggi() {
-        listaMessaggiDataNonSbloccata.add("Non è ancora iniziato dicembre!");
+        listaMessaggiDataNonSbloccata.add("Questo giorno è ancora bloccato");
         listaMessaggiDataNonSbloccata.add("È inutile che ci provi");
         listaMessaggiDataNonSbloccata.add("Smettila di cliccare altre date");
         listaMessaggiDataNonSbloccata.add("Sono bloccate");

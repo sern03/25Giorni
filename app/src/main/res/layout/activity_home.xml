@@ -74,6 +74,15 @@
 
         </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -91,7 +100,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:visibility="invisible"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateRecyclerView" />
@@ -99,7 +108,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingBottom="50dp"
+        android:paddingBottom="60dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -152,33 +161,49 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="45dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textViewAugurio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Buon ascolto: "
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/buttonLink"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:background="@drawable/style_button2"
-                        android:text="clicca qui"
-                        android:textStyle="bold"
-                        android:textAllCaps="false"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"
-                        android:layout_marginStart="10dp"
-                        tools:ignore="HardcodedText" />
+                        <TextView
+                            android:id="@+id/textViewAugurio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Buon ascolto: "
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <Button
+                            android:id="@+id/buttonLink"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:background="@drawable/style_button2"
+                            android:text="clicca qui"
+                            android:textStyle="bold"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textColor="@color/white"
+                            android:layout_marginStart="10dp"
+                            tools:ignore="HardcodedText" />
+
+                    </LinearLayout>
+
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="-1dp"
+                        android:background="@color/white"/>
 
 
                 </LinearLayout>
@@ -188,7 +213,6 @@
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
                     android:background="@drawable/style_background_white">
@@ -206,19 +230,21 @@
                             android:text="testo"
                             android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             tools:ignore="HardcodedText" />
 
                         <ImageView
                             android:id="@+id/imageView"
                             android:layout_width="200dp"
                             android:layout_height="300dp"
-                            android:layout_marginTop="5dp"/>
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="2dp"/>
 
                     </LinearLayout>
 
 
                 </ScrollView>
+
 
 
             </LinearLayout>
@@ -227,7 +253,11 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="-1dp"
+            android:background="@color/white"/>
 
 
     </LinearLayout>

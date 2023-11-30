@@ -14,8 +14,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +55,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
 
     SwipeRefreshLayout swipeRefreshLayout;
 
-    ProgressBar progressBar;
+    ProgressBar progressBar, progressBar2;
 
     LocalDate currentDate;
 
@@ -59,10 +64,10 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
     DatabaseReference percorsoDay;
 
 
-            //dayly
+    //dayly
     TextView textViewDayOfMonth, textViewSottotitolo,
-                textViewAugurio,
-                textViewTesto;
+            textViewAugurio,
+            textViewTesto;
     Button buttonLink;
     ImageView imageView;
     String bitmapString, link, testo, testoAugurio;
@@ -85,6 +90,7 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         progressBar = findViewById(R.id.progressBar);
+        progressBar2 = findViewById(R.id.progressBar2);
         textViewCounter = findViewById(R.id.textViewCounter);
         textViewTextTitolo = findViewById(R.id.textViewTextTitolo);
 
@@ -95,6 +101,10 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
         textViewTesto = findViewById(R.id.textViewTesto);
         imageView = findViewById(R.id.imageView);
         scrollView = findViewById(R.id.scrollView);
+
+        if (!isNetworkAvailable()) {
+            Toast.makeText(this, "Errore di connessione", Toast.LENGTH_SHORT).show();
+        }
 
         populateArrayMessaggi();
 
@@ -116,15 +126,14 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
         dateRecyclerView = findViewById(R.id.dateRecyclerView);
         initializeDatePicker();
 
-                        // ottengo il giorno corrente e se è supportato procedo
+        // ottengo il giorno corrente e se è supportato procedo
         currentDate = LocalDate.now();
-                        currentDate = LocalDate.of(2023, 12, 2);   /////////////////////////////////////////////////////////
         LocalDate dataNatale2023 = LocalDate.of(2023, 12, 25);
         LocalDate inizioAvvento = LocalDate.of(2023, 12, 1);
 
         int currentDayOfMonth = currentDate.getDayOfMonth();
 
-                        //AZIONI TITOLO
+        //AZIONI TITOLO
         if(dataNatale2023.isAfter(currentDate)){ //natale deve arrivare
             textViewCounter.setText(String.valueOf(ChronoUnit.DAYS.between(currentDate, dataNatale2023)));
         }else if(dataNatale2023.isBefore(currentDate)){  //passato
@@ -137,10 +146,10 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
         }
 
 
-            //AZIONI loadDay()
+        //AZIONI loadDay()
         if(currentDate.isAfter(inizioAvvento) || currentDate.isEqual(inizioAvvento)
                 && currentDate.isBefore(dataNatale2023) || currentDate.isEqual(dataNatale2023)){  //se la data è supportata
-                //applicazione in esecuzioni nei giorni di avvendo esatti
+            //applicazione in esecuzioni nei giorni di avvendo esatti
             dateRecyclerView.smoothScrollToPosition(currentDayOfMonth);
 
             loadDay(String.valueOf(currentDayOfMonth), false);
@@ -149,10 +158,8 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
         }else{  //data non supportata
 
             if(currentDate.isBefore(inizioAvvento)){   //se si usa l'app prima dell'inizio del calendario
-                textViewDayOfMonth.setText(String.valueOf(1));  //il giorno "selezionato" sarà 1
-                loadDay(String.valueOf(currentDayOfMonth), false);
+                loadDay("1", true);
             }else if(currentDate.isAfter(inizioAvvento)){  //se si usa l'app dopo la fine del calendario
-                textViewDayOfMonth.setText(String.valueOf(25));  //il giorno "selezionato" sarà 25
                 loadDay("25", false);   //carica l'ultimo giorno del calendario
             }
 
@@ -182,10 +189,22 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
 
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+        return false;
+    }
+
 
     private void loadDay(String dayOfMonth, boolean callDaClick){
         if(!clickPerMessaggio) textViewDayOfMonth.setText(dayOfMonth);
-                //(questo controllo è utile solo nel caso in cui si clicchi una data nel calendario o si apra prima dell'1)
+
+        textViewAugurio.setText("");
+
+        //(questo controllo è utile solo nel caso in cui si clicchi una data nel calendario o si apra prima dell'1)
         if(currentDate.isBefore(LocalDate.of(2023, 12, Integer.parseInt(dayOfMonth)))){
             //se la data cliccata (dayOfMonth) è maggiore a quella corrente -> data non sbloccata
             swipeRefreshLayout.setEnabled(true);  //lo riattivo
@@ -211,7 +230,8 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
 
             }
 
-        }else{                                         //data supportata
+        }else {                                         //data supportata
+            textViewDayOfMonth.setText(dayOfMonth);
             progressBar.setVisibility(View.VISIBLE);
             swipeRefreshLayout.setEnabled(false);  //lo disabilito per lo scorrimento della scrollView
 
@@ -221,60 +241,105 @@ public class Home extends AppCompatActivity implements DateAdapter.OnDateClickLi
             textViewAugurio.setText(testoAugurio);
             scrollView.setVisibility(View.INVISIBLE);
 
-            percorsoDay = FirebaseDatabase.getInstance().getReference().child(String.valueOf(dayOfMonth));
+            if (!isNetworkAvailable()) {                                //se non c'è connessione
+                Toast.makeText(this, "Errore di connessione\nimpossibile aggiornare", Toast.LENGTH_SHORT).show();
 
-            percorsoDay.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    bitmapString = snapshot.child("Foto").getValue().toString();
-                    link = snapshot.child("Link").getValue().toString();
-                    testo = snapshot.child("Testo").getValue().toString();
-                    testoAugurio = snapshot.child("TestoAugurio").getValue().toString();
+                populateFromLocal(dayOfMonth);
 
-                    populate();
+            } else {                                          //c'è connessione
+                populateFromLocal(dayOfMonth);
+                progressBar2.setVisibility(View.VISIBLE);
 
-                    progressBar.setVisibility(View.INVISIBLE);
-                    scrollView.setVisibility(View.VISIBLE);
-                }
+                percorsoDay = FirebaseDatabase.getInstance().getReference().child(String.valueOf(dayOfMonth));
 
-                private void populate() {
-                    textViewTesto.setText(testo);
-                    textViewAugurio.setText(testoAugurio);
+                percorsoDay.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.child("Modificato").getValue(Boolean.class)) {
 
-                    if(!bitmapString.matches("")){ // se è stata condivisa una foto
-                        convertiBitmap();
-                    }else{                   //bitmap non condiviso
-                        imageView.setImageDrawable(null);
-                        imageView.setVisibility(View.GONE);
-                    }
+                            percorsoDay.child("Modificato").setValue(false)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            bitmapString = snapshot.child("Foto").getValue().toString();
+                                            link = snapshot.child("Link").getValue().toString();
+                                            testo = snapshot.child("Testo").getValue().toString();
+                                            testoAugurio = snapshot.child("TestoAugurio").getValue().toString();
 
-                    if(!link.matches("")){   // se è stato condiviso un link
-                        buttonLink.setVisibility(View.VISIBLE);
-                    }else{        //link non condiviso
-                        buttonLink.setVisibility(View.GONE);
-                    }
+                                            populateDay();
 
-                }
+                                            progressBar2.setVisibility(View.INVISIBLE);
 
-                private void convertiBitmap() {
-                    try {
-                        byte [] encodeByte = Base64.decode(bitmapString,Base64.DEFAULT);
-                        imageBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                        imageView.setImageBitmap(imageBitmap);
-                        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        imageView.setVisibility(View.VISIBLE);
-                    }catch (Exception ignored){
+                                            saveOnLocal();
+
+                                        }
+                                    });
+                        } else {
+                            progressBar2.setVisibility(View.INVISIBLE);
+                        }
 
                     }
 
-                }
+                    private void saveOnLocal() {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(dayOfMonth + "/Foto", bitmapString);
+                        editor.putString(dayOfMonth + "/Link", link);
+                        editor.putString(dayOfMonth + "/Testo", testo);
+                        editor.putString(dayOfMonth + "/TestoAugurio", testoAugurio);
+                        editor.apply();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(Home.this, "Errore di connessione", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
 
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(Home.this, "Errore di connessione", Toast.LENGTH_SHORT).show();
-                }
-            });
+        }
+
+    }
+
+    private void populateFromLocal(String dayOfMonth) {    //carica il giorno da locale
+        bitmapString = sharedPreferences.getString(dayOfMonth + "/Foto", "");
+        link = sharedPreferences.getString(dayOfMonth + "/Link", "");
+        testo = sharedPreferences.getString(dayOfMonth + "/Testo", "");
+        testoAugurio = sharedPreferences.getString(dayOfMonth + "/TestoAugurio", "");
+
+        populateDay();
+    }
+
+    private void populateDay() {           //carica giorno
+        textViewTesto.setText(Html.fromHtml("<br>" + testo));
+        textViewAugurio.setText(Html.fromHtml(testoAugurio));
+
+        if(!bitmapString.matches("")){ // se è stata condivisa una foto
+            convertiBitmap();
+        }else{                   //bitmap non condiviso
+            imageView.setImageDrawable(null);
+            imageView.setVisibility(View.GONE);
+        }
+
+        if(!link.matches("")){   // se è stato condiviso un link
+            buttonLink.setVisibility(View.VISIBLE);
+        }else{        //link non condiviso
+            buttonLink.setVisibility(View.GONE);
+        }
+
+        scrollView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void convertiBitmap() {
+        try {
+            byte [] encodeByte = Base64.decode(bitmapString,Base64.DEFAULT);
+            imageBitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            imageView.setImageBitmap(imageBitmap);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setVisibility(View.VISIBLE);
+        }catch (Exception ignored){
+
         }
 
     }
